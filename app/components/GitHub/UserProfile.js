@@ -15,4 +15,4 @@ var UserProfile=React.createClass({
     }
 })
 
-module.exports=UserProfile;
+module.exports = UserProfile;
