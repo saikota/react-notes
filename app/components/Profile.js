@@ -18,18 +18,26 @@ var Profile=React.createClass({
     },
     componentDidMount:function(){
         this.ref=new Firebase('https://egg-notes.firebaseio.com/');
-        this.childRef=this.ref.child(this.props.params.username);
+        this.init(this.props.params.username);
+    },
+    componentWillReceiveProps:function(nextProps){
+        this.unbind('notes');
+        this.init(nextProps.params.username);
+    },
+    componentWillUnmount:function(){
+        this.unbind('notes');
+        this.init();
+    },
+    init:function(username){
+        this.childRef=this.ref.child(username);
         this.bindAsArray(this.childRef,'notes');
 
-        Helpers.getGithubInfo(this.props.params.username).then(function(data){
+        Helpers.getGithubInfo(username).then(function(data){
             this.setState({
                 bio:data.bio,
                 repos:data.repos
             })
         }.bind(this))
-    },
-    componentWillUnmount:function(){
-        this.unbind('notes');
     },
     handleAddNote:function(newNote){
         //update firebase

@@ -447,18 +447,26 @@
 	    },
 	    componentDidMount: function componentDidMount() {
 	        this.ref = new Firebase('https://egg-notes.firebaseio.com/');
-	        this.childRef = this.ref.child(this.props.params.username);
+	        this.init(this.props.params.username);
+	    },
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        this.unbind('notes');
+	        this.init(nextProps.params.username);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        this.unbind('notes');
+	        this.init();
+	    },
+	    init: function init(username) {
+	        this.childRef = this.ref.child(username);
 	        this.bindAsArray(this.childRef, 'notes');
 
-	        Helpers.getGithubInfo(this.props.params.username).then(function (data) {
+	        Helpers.getGithubInfo(username).then(function (data) {
 	            this.setState({
 	                bio: data.bio,
 	                repos: data.repos
 	            });
 	        }.bind(this));
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        this.unbind('notes');
 	    },
 	    handleAddNote: function handleAddNote(newNote) {
 	        //update firebase
@@ -4262,7 +4270,7 @@
 	    handleSubmit: function handleSubmit() {
 	        var userName = this.userNameRef.value;
 	        this.userNameRef.value = "";
-	        this.history.pushState(null, "profile/" + userName);
+	        this.history.pushState(null, "/profile/" + userName);
 	    },
 	    render: function render() {
 	        return React.createElement(
