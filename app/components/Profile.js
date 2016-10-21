@@ -3,7 +3,7 @@ var Router=require('react-router');
 var Repos=require('../components/GitHub/Repos');
 var UserProfile=require('./GitHub/UserProfile');
 var Notes=require('./Notes/Notes');
-
+var Helpers=require('../utils/Helpers');
 var ReactFireMixin=require('reactfire');
 var FireBase=require('firebase');
 
@@ -20,6 +20,13 @@ var Profile=React.createClass({
         this.ref=new Firebase('https://egg-notes.firebaseio.com/');
         this.childRef=this.ref.child(this.props.params.username);
         this.bindAsArray(this.childRef,'notes');
+
+        Helpers.getGithubInfo(this.props.params.username).then(function(data){
+            this.setState({
+                bio:data.bio,
+                repos:data.repos
+            })
+        }.bind(this))
     },
     componentWillUnmount:function(){
         this.unbind('notes');
