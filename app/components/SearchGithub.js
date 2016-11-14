@@ -19,7 +19,7 @@ var SearchGithub=React.createClass({
             <div className="col-sm-12">
             <form onSubmit={this.handleSubmit}>
                 <div className="form-group col-sm-7">
-                <input type="text" className="form-control" ref={this.getRef}/>
+                <input type="text" className="form-control" ref={this.getRef} placeholder="SaiKota"/>
                 </div>
                 <div className="form-group col-sm-5">
                     <button type="submit" className="btn btn-block btn-primary"> Search Github</button>
